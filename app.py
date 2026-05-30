@@ -143,4 +143,4 @@ if __name__ == '__main__':
     print(f"   GitHub: {GITHUB_USER}/{GITHUB_REPO}")
     print(f"   Slack channel: {SLACK_CHANNEL}")
     print("   Open: http://localhost:5000")
-    app.run(debug=True, port=5000)
+    app.run(debug=True, host='0.0.0.0', port=int(os.getenv("PORT", 10000)))

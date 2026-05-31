@@ -7,7 +7,7 @@ from collections import defaultdict
 
 load_dotenv()
 
-app = Flask(__name__, static_folder='.')
+app = Flask(_name_, static_folder='static')
 
 GITHUB_USER   = os.getenv('GITHUB_USERNAME', 'mauryasagar')
 GITHUB_REPO   = os.getenv('GITHUB_REPO', 'devs_first_mate')
@@ -79,7 +79,8 @@ def draft_release_notes(prs):
 
 @app.route('/')
 def home():
-    return app.send_static_file('index.html')
+    from flask import send_from_directory
+    return send_from_directory('static', 'index.html')
 
 
 @app.route('/api/attention')

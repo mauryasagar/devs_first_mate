@@ -70,3 +70,66 @@ Developers context-switch constantly — GitHub for issues and PRs, Slack for te
 ## ⚡️ Coral SQL Queries
 
 ### Open Issues Triage
+
+SELECT number, title, state, created_at
+FROM github.issues
+WHERE repo = 'devs_first_mate' AND state = 'open'
+ORDER BY created_at DESC
+LIMIT 10
+
+### Cross-source JOIN — GitHub + Slack in one query
+SELECT g.number, g.title, s.text AS slack_discussion
+FROM github.issues g
+JOIN slack.messages s ON s.channel_id = 'CHANNEL_ID'
+WHERE g.state = 'open'
+ORDER BY g.created_at DESC
+
+### Schema Discovery
+SELECT schema_name, table_name
+FROM coral.tables
+ORDER BY 1, 2
+
+### Release Notes from Merged PRs
+SELECT number, title, merged_at
+FROM github.pulls
+WHERE repo = 'devs_first_mate' AND state = 'closed'
+ORDER BY merged_at DESC
+LIMIT 10
+
+---
+
+## 🔗 Links
+
+| | |
+|---|---|
+| 🌐 Live App | https://devs-first-mate.onrender.com |
+| 📦 GitHub (Sagar) | https://github.com/mauryasagar/devs_first_mate |
+| 📦 GitHub (Disha) | https://github.com/ritamonisonowal2/devs_first_mate |
+| ⭐️ Star Coral | https://git.new/coral-wemakedevs-may26 |
+
+---
+
+## 🏃 Run Locally
+
+# 1. Clone the repo
+git clone https://github.com/mauryasagar/devs_first_mate
+cd devs_first_mate
+
+# 2. Install Coral
+brew install withcoral/tap/coral        # macOS
+# or
+curl -fsSL https://withcoral.com/install.sh | sh   # Linux
+
+# 3. Add sources
+coral source add --interactive github
+coral source add --interactive slack
+
+# 4. Install Python dependencies
+pip install -r requirements.txt
+
+# 5. Run the app
+python app.py
+
+---
+
+*Built with ❤️ for WeMakeDevs

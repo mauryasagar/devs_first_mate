@@ -1,5 +1,6 @@
 # 🏴‍☠️ Dev's First Mate
-> WeMakeDevs Hackathon — Pirates of Coral-bean | Track 2: Personal Agent
+> WeMakeDevs Hackathon — Pirates of Coral-bean | Track 2: Personal Agent.
+
 
 [![Live Demo](https://img.shields.io/badge/🌐_Live_Demo-devs--first--mate.onrender.com-blue)](https://devs-first-mate.onrender.com)
 [![Powered by Coral](https://img.shields.io/badge/Powered_by-Coral_SQL-0A7C8A)](https://git.new/coral-wemakedevs-may26)

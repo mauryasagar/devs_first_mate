@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🏴‍☠️ Dev's First Mate</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap');
+
+  :root {
+    --bg: #0A1628;
+    --surface: #111f38;
+    --surface2: #1a2d4a;
+    --accent: #F5A623;
+    --accent2: #00B4D8;
+    --accent3: #7C3AED;
+    --text: #e8f0fe;
+    --muted: #7a90b0;
+    --danger: #ef4444;
+    --success: #22c55e;
+    --border: rgba(245,166,35,0.18);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Syne', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 0;
+    overflow-x: hidden;
+  }
+
+  /* Animated background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 40% at 20% 10%, rgba(0,180,216,0.07) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 50% at 80% 80%, rgba(124,58,237,0.07) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 60% at 50% 50%, rgba(245,166,35,0.04) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Header */
+  header {
+    text-align: center;
+    margin-bottom: 48px;
+    animation: fadeDown 0.6s ease both;
+  }
+
+  .logo {
+    font-size: 13px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-family: 'Space Mono', monospace;
+    margin-bottom: 12px;
+    opacity: 0.85;
+  }
+
+  h1 {
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 800;
+    line-height: 1.1;
+    background: linear-gradient(135deg, #F5A623 0%, #ffcf6b 40%, #00B4D8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 12px;
+  }
+
+  .subtitle {
+    color: var(--muted);
+    font-size: 15px;
+    font-family: 'Space Mono', monospace;
+  }
+
+  /* CTA Button */
+  .cta-wrap {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 44px;
+    animation: fadeUp 0.7s 0.2s ease both;
+  }
+
+  .btn-main {
+    background: var(--accent);
+    color: #0A1628;
+    border: none;
+    padding: 14px 36px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 700;
+    font-family: 'Syne', sans-serif;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+    transition: transform 0.15s, box-shadow 0.15s, background 0.15s;
+    box-shadow: 0 4px 24px rgba(245,166,35,0.25);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-main:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(245,166,35,0.4);
+    background: #ffcf6b;
+  }
+
+  .btn-main:active { transform: translateY(0); }
+
+  .btn-main.loading {
+    pointer-events: none;
+    opacity: 0.7;
+  }
+
+  /* Status bar */
+  #status-bar {
+    display: none;
+    align-items: center;
+    gap: 10px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 20px;
+    margin-bottom: 32px;
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    color: var(--accent2);
+    animation: fadeUp 0.3s ease both;
+  }
+
+  #status-bar.visible { display: flex; }
+
+  .spinner {
+    width: 16px; height: 16px;
+    border: 2px solid rgba(0,180,216,0.2);
+    border-top-color: var(--accent2);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    flex-shrink: 0;
+  }
+
+  /* Results grid */
+  #results {
+    display: none;
+    flex-direction: column;
+    gap: 24px;
+    animation: fadeUp 0.5s ease both;
+  }
+
+  #results.visible { display: flex; }
+
+  /* Section */
+  .section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-icon { font-size: 20px; }
+
+  .section-title {
+    font-weight: 700;
+    font-size: 15px;
+    flex: 1;
+  }
+
+  .badge {
+    background: rgba(245,166,35,0.15);
+    color: var(--accent);
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    border: 1px solid rgba(245,166,35,0.3);
+  }
+
+  .badge.blue {
+    background: rgba(0,180,216,0.1);
+    color: var(--accent2);
+    border-color: rgba(0,180,216,0.25);
+  }
+
+  /* Cards */
+  .cards { padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+
+  .card {
+    background: rgba(10,22,40,0.5);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 8px;
+    padding: 14px 16px;
+    transition: border-color 0.2s, transform 0.15s;
+  }
+
+  .card:hover {
+    border-color: rgba(245,166,35,0.25);
+    transform: translateX(3px);
+  }
+
+  .card-title {
+    font-weight: 700;
+    font-size: 14px;
+    margin-bottom: 6px;
+    color: var(--text);
+  }
+
+  .card-meta {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: rgba(0,180,216,0.12);
+    color: var(--accent2);
+    border: 1px solid rgba(0,180,216,0.2);
+  }
+
+  .tag.green {
+    background: rgba(34,197,94,0.1);
+    color: var(--success);
+    border-color: rgba(34,197,94,0.2);
+  }
+
+  .tag.purple {
+    background: rgba(124,58,237,0.12);
+    color: #a78bfa;
+    border-color: rgba(124,58,237,0.25);
+  }
+
+  .tag.red {
+    background: rgba(239,68,68,0.1);
+    color: var(--danger);
+    border-color: rgba(239,68,68,0.2);
+  }
+
+  .card-user {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  .card-time {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    margin-left: auto;
+  }
+
+  /* Release notes */
+  .release-notes-content {
+    padding: 16px 20px;
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    line-height: 1.7;
+    color: #c0d0e8;
+    white-space: pre-wrap;
+    border-top: 1px solid var(--border);
+  }
+
+  /* Slack messages */
+  .slack-msg {
+    display: flex;
+    gap: 12px;
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+
+  .slack-msg:last-child { border-bottom: none; }
+
+  .slack-avatar {
+    width: 32px; height: 32px;
+    border-radius: 6px;
+    background: linear-gradient(135deg, var(--accent3), var(--accent2));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700; flex-shrink: 0;
+    color: white;
+  }
+
+  .slack-body { flex: 1; min-width: 0; }
+
+  .slack-user {
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--accent);
+    margin-bottom: 3px;
+  }
+
+  .slack-text {
+    font-size: 13px;
+    color: #c0d0e8;
+    line-height: 1.5;
+    word-break: break-word;
+  }
+
+  /* Empty state */
+  .empty {
+    padding: 28px 20px;
+    text-align: center;
+    color: var(--muted);
+    font-size: 13px;
+    font-family: 'Space Mono', monospace;
+  }
+
+  /* Error state */
+  .error-card {
+    background: rgba(239,68,68,0.07);
+    border: 1px solid rgba(239,68,68,0.2);
+    border-radius: 10px;
+    padding: 20px 24px;
+    color: #fca5a5;
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    line-height: 1.7;
+  }
+
+  .error-card strong { color: var(--danger); font-size: 15px; display: block; margin-bottom: 8px; }
+
+  /* MCP badge */
+  .mcp-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: linear-gradient(90deg, rgba(124,58,237,0.2), rgba(0,180,216,0.15));
+    border: 1px solid rgba(124,58,237,0.3);
+    border-radius: 20px;
+    padding: 4px 14px;
+    font-size: 11px;
+    font-family: 'Space Mono', monospace;
+    color: #a78bfa;
+    margin-left: 8px;
+  }
+
+  /* Animations */
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  /* Footer */
+  footer {
+    text-align: center;
+    padding: 40px 0 20px;
+    color: var(--muted);
+    font-size: 12px;
+    font-family: 'Space Mono', monospace;
+    opacity: 0.6;
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <div class="logo">🏴‍☠️ Pirates of Coral-bean · Track 2</div>
+    <h1>Dev's First Mate</h1>
+    <p class="subtitle">GitHub + Slack unified via Coral SQL <span class="mcp-tag">⚡ MCP Powered</span></p>
+  </header>
+
+  <div class="cta-wrap">
+    <button class="btn-main" id="loadBtn" onclick="loadData()">
+      🔍 What needs my attention today?
+    </button>
+  </div>
+
+  <div id="status-bar">
+    <div class="spinner"></div>
+    <span id="status-text">Querying Coral across GitHub + Slack...</span>
+  </div>
+
+  <div id="results"></div>
+
+  <footer>Built with ❤️ for WeMakeDevs Hackathon · Powered by Coral</footer>
+</div>
+
+<script>
+function formatTime(ts) {
+  if (!ts) return '';
+  const d = new Date(ts);
+  return d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+}
+
+function initials(name) {
+  return (name || '?').split(/[\s_-]/)[0].slice(0,2).toUpperCase();
+}
+
+function renderIssues(issues) {
+  if (!issues || issues.length === 0) return '<div class="empty">✓ No open issues — you\'re clear!</div>';
+  return '<div class="cards">' + issues.map(i => `
+    <div class="card">
+      <div class="card-title">#${i.number} — ${i.title}</div>
+      <div class="card-meta">
+        <span class="tag">open</span>
+        <span class="card-user">@${i.user_login || 'unknown'}</span>
+        <span class="card-time">${formatTime(i.created_at)}</span>
+      </div>
+    </div>
+  `).join('') + '</div>';
+}
+
+function renderPRs(prs) {
+  if (!prs || prs.length === 0) return '<div class="empty">No recently merged PRs found.</div>';
+  return '<div class="cards">' + prs.map(p => `
+    <div class="card">
+      <div class="card-title">#${p.number} — ${p.title}</div>
+      <div class="card-meta">
+        <span class="tag green">merged</span>
+        <span class="card-user">@${p.user_login || 'unknown'}</span>
+        <span class="card-time">${formatTime(p.merged_at)}</span>
+      </div>
+    </div>
+  `).join('') + '</div>';
+}
+
+function renderSlack(messages) {
+  if (!messages || messages.length === 0) return '<div class="empty">No Slack messages found in configured channel.</div>';
+  return messages.map(m => `
+    <div class="slack-msg">
+      <div class="slack-avatar">${initials(m.user || m.username)}</div>
+      <div class="slack-body">
+        <div class="slack-user">${m.user || m.username || 'Unknown'}</div>
+        <div class="slack-text">${m.text || ''}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderJoin(rows) {
+  if (!rows || rows.length === 0) return '<div class="empty">No cross-source matches found.</div>';
+  return '<div class="cards">' + rows.map(r => `
+    <div class="card">
+      <div class="card-title">#${r.number} — ${r.title}</div>
+      <div class="card-meta">
+        <span class="tag purple">cross-join</span>
+        <span class="tag blue">GitHub ↔ Slack</span>
+      </div>
+      ${r.slack_discussion ? `<div style="margin-top:8px;font-size:12px;color:var(--muted);font-family:'Space Mono',monospace;">💬 ${r.slack_discussion}</div>` : ''}
+    </div>
+  `).join('') + '</div>';
+}
+
+async function loadData() {
+  const btn = document.getElementById('loadBtn');
+  const statusBar = document.getElementById('status-bar');
+  const statusText = document.getElementById('status-text');
+  const results = document.getElementById('results');
+
+  btn.classList.add('loading');
+  btn.textContent = '⏳ Loading...';
+  statusBar.classList.add('visible');
+  results.classList.remove('visible');
+  results.innerHTML = '';
+
+  const steps = [
+    'Querying Coral across GitHub + Slack...',
+    'Running cross-source JOIN...',
+    'Drafting release notes...',
+    'Assembling your attention digest...'
+  ];
+  let si = 0;
+  const stepTimer = setInterval(() => {
+    si = (si + 1) % steps.length;
+    statusText.textContent = steps[si];
+  }, 1200);
+
+  try {
+    const res = await fetch('/api/attention');
+    const data = await res.json();
+
+    clearInterval(stepTimer);
+    statusBar.classList.remove('visible');
+    btn.classList.remove('loading');
+    btn.textContent = '🔄 Refresh';
+
+    if (data.error) {
+      results.innerHTML = `<div class="error-card"><strong>⚠️ Error</strong>${data.error}<br><br>Make sure Coral is running and your .env is configured correctly.</div>`;
+      results.classList.add('visible');
+      return;
+    }
+
+    results.innerHTML = `
+      <div class="section">
+        <div class="section-header">
+          <span class="section-icon">🐛</span>
+          <span class="section-title">Open Issues Needing Triage</span>
+          <span class="badge">${(data.issues || []).length} issues</span>
+        </div>
+        ${renderIssues(data.issues)}
+      </div>
+
+      <div class="section">
+        <div class="section-header">
+          <span class="section-icon">✅</span>
+          <span class="section-title">Recently Merged PRs</span>
+          <span class="badge">${(data.prs || []).length} merged</span>
+        </div>
+        ${renderPRs(data.prs)}
+      </div>
+
+      <div class="section">
+        <div class="section-header">
+          <span class="section-icon">⚡</span>
+          <span class="section-title">Cross-Source JOIN: GitHub ↔ Slack</span>
+          <span class="badge blue">Coral Superpower</span>
+        </div>
+        ${renderJoin(data.cross_join)}
+      </div>
+
+      <div class="section">
+        <div class="section-header">
+          <span class="section-icon">💬</span>
+          <span class="section-title">Recent Slack Activity</span>
+          <span class="badge blue">${(data.slack || []).length} messages</span>
+        </div>
+        ${renderSlack(data.slack)}
+      </div>
+
+      ${data.release_notes ? `
+      <div class="section">
+        <div class="section-header">
+          <span class="section-icon">📝</span>
+          <span class="section-title">Auto-Drafted Release Notes</span>
+          <span class="badge">AI Generated</span>
+        </div>
+        <div class="release-notes-content">${data.release_notes}</div>
+      </div>` : ''}
+    `;
+
+    results.classList.add('visible');
+
+  } catch (err) {
+    clearInterval(stepTimer);
+    statusBar.classList.remove('visible');
+    btn.classList.remove('loading');
+    btn.textContent = '🔍 What needs my attention today?';
+    results.innerHTML = `<div class="error-card"><strong>⚠️ Could not connect to backend</strong>Make sure <code>python app.py</code> is running on port 5000.<br><br>${err.message}</div>`;
+    results.classList.add('visible');
+  }
+}
+</script>
+</body>
+</html>

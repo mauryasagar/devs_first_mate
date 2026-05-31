@@ -1,11 +1,11 @@
 # 🏴‍☠️ Dev's First Mate
 > WeMakeDevs Hackathon — Pirates of Coral-bean | Track 2: Personal Agent
 
-![Live Demo (https://img.shields.io/badge/%F0%9F%8C%90_Live_Demo-devs--first--mate.onrender.com-blue)](https://devs-first-mate.onrender.com)
-![Built with Coral (https://img.shields.io/badge/Powered_by-Coral_SQL-0A7C8A)](https://git.new/coral-wemakedevs-may26)
-![Python (https://img.shields.io/badge/Python-3.11-yellow?logo=python)](https://python.org)
-![Flask (https://img.shields.io/badge/Flask-Backend-black?logo=flask)](https://flask.palletsprojects.com)
-![Deployed on Render (https://img.shields.io/badge/Deployed_on-Render-46E3B7?logo=render)](https://render.com)
+[![Live Demo](https://img.shields.io/badge/🌐_Live_Demo-devs--first--mate.onrender.com-blue)](https://devs-first-mate.onrender.com)
+[![Powered by Coral](https://img.shields.io/badge/Powered_by-Coral_SQL-0A7C8A)](https://git.new/coral-wemakedevs-may26)
+[![Python 3.11](https://img.shields.io/badge/Python-3.11-yellow?logo=python)](https://python.org)
+[![Flask Backend](https://img.shields.io/badge/Flask-Backend-black?logo=flask)](https://flask.palletsprojects.com)
+[![Deployed on Render](https://img.shields.io/badge/Deployed_on-Render-46E3B7?logo=render)](https://render.com)
 
 > *"What needs my attention today?"* — answered in one shot by joining GitHub and Slack through Coral (https://git.new/coral-wemakedevs-may26)'s unified SQL runtime.
 

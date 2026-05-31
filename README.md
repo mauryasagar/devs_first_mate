@@ -141,5 +141,5 @@ python app.py
 
 ---
 
-Hackathon — Pirates of Coral-bean · Powered by Coral (https://git.new/coral-wemakedevs-may26)
 Built with ❤️ for WeMakeDevs
+Hackathon — Pirates of Coral-bean · Powered by Coral

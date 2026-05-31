@@ -42,7 +42,8 @@ Developers context-switch constantly — GitHub for issues and PRs, Slack for te
 
 !Dev's First Mate Dashboard
 
-<img width="600" height="300" alt="image" src="https://github.com/user-attachments/assets/c0c77e2b-e0ff-4064-b8ee-a3c60068afbb" />
+<img width="600" height="300" alt="image" src="https://github.com/user-attachments/assets/3eb986c8-be42-4169-9058-41db52a33ddd" />
+
 
 ## ⚡ Coral in Action
 

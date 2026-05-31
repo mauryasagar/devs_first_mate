@@ -8,7 +8,7 @@
 [![Flask Backend](https://img.shields.io/badge/Flask-Backend-black?logo=flask)](https://flask.palletsprojects.com)
 [![Deployed on Render](https://img.shields.io/badge/Deployed_on-Render-46E3B7?logo=render)](https://render.com)
 
-> *"What needs my attention today?"* — answered in one shot by joining GitHub through Coral (https://git.new/coral-wemakedevs-may26)'s unified SQL runtime.
+> *"What needs my attention today?"* — answered instantly by pulling GitHub data through Coral's unified SQL runtime.
 
 ---
 
@@ -32,7 +32,7 @@ Developers context-switch constantly — GitHub for issues and PRs. There's no s
 - 🐛 Triages open GitHub issues — ordered by recency so nothing falls through
 - 🔁 Detects duplicate issues — using keyword matching to cut noise
 - ✅ Drafts release notes — auto-generated from merged PRs
-- ⚡️ Cross-source JOIN — GitHub + Slack answered in one Coral SQL query
+- ⚡️ Real-time digest — GitHub data in one Coral SQL query
 - 🤖 MCP Integration — AI agents can query your data directly via Coral's MCP server
 
 ---
@@ -57,8 +57,7 @@ Developers context-switch constantly — GitHub for issues and PRs. There's no s
 
 | Feature | How We Used It |
 |---|---|
-| SQL Interface | coral sql "SELECT ..." to query GitHub |
-| Cross-source JOIN | FROM github.issues JOIN slack.messages in a single query |
+| SQL Interface | coral sql "SELECT ..." to query GitHub issues & PRs |
 | Schema Learning | SELECT * FROM coral.tables to discover available data |
 | MCP Server | coral mcp to expose data to AI agents |
 | Caching | Built-in Coral caching on repeated queries for speed |
@@ -88,15 +87,6 @@ ORDER BY created_at DESC
 LIMIT 10
 ```
 
-### Cross-source JOIN — GitHub + Slack in one query
-```
-SELECT g.number, g.title, s.text AS slack_discussion
-FROM github.issues g
-JOIN slack.messages s ON s.channel_id = 'CHANNEL_ID'
-WHERE g.state = 'open'
-ORDER BY g.created_at DESC
-```
-
 ### Schema Discovery
 ```
 SELECT schema_name, table_name
@@ -108,7 +98,8 @@ ORDER BY 1, 2
 ```
 SELECT number, title, merged_at
 FROM github.pulls
-WHERE repo = 'devs_first_mate' AND state = 'closed'
+WHERE owner = 'mauryasagar' AND repo = 'devs_first_mate'
+AND state = 'closed'
 ORDER BY merged_at DESC
 LIMIT 10
 ```
@@ -136,9 +127,8 @@ brew install withcoral/tap/coral        # macOS
 # or
 curl -fsSL https://withcoral.com/install.sh | sh   # Linux
 
-# 3. Add sources
+# 3. Add GitHub source
 coral source add --interactive github
-coral source add --interactive slack
 
 # 4. Install Python dependencies
 pip install -r requirements.txt

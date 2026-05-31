@@ -70,31 +70,38 @@ Developers context-switch constantly — GitHub for issues and PRs, Slack for te
 ## ⚡️ Coral SQL Queries
 
 ### Open Issues Triage
-
+```
 SELECT number, title, state, created_at
 FROM github.issues
 WHERE repo = 'devs_first_mate' AND state = 'open'
 ORDER BY created_at DESC
 LIMIT 10
+```
 
 ### Cross-source JOIN — GitHub + Slack in one query
+```
 SELECT g.number, g.title, s.text AS slack_discussion
 FROM github.issues g
 JOIN slack.messages s ON s.channel_id = 'CHANNEL_ID'
 WHERE g.state = 'open'
 ORDER BY g.created_at DESC
+```
 
 ### Schema Discovery
+```
 SELECT schema_name, table_name
 FROM coral.tables
 ORDER BY 1, 2
+```
 
 ### Release Notes from Merged PRs
+```
 SELECT number, title, merged_at
 FROM github.pulls
 WHERE repo = 'devs_first_mate' AND state = 'closed'
 ORDER BY merged_at DESC
 LIMIT 10
+```
 
 ---
 

@@ -36,7 +36,7 @@ def run_coral(query):
 
 
 def find_duplicates(issues):
-    stop_words = {'the','and','for','are','but','not','you','all','can','had','her','was','one','our','out','day','get','has','him','his','how','its','may','new','now','old','see','two','who','did','let','put','say','she','too','use','add','bug','fix','feat','feature','page','issue','error','problem'}
+    stop_words = {'the','and','for','are','but','not','you','all','can','had','her','was','one','our','out','day','get','has','him','his','how','its','may','new','now','old','see','two','who','did','let','put','say','she','too','use','add','bug','fix','feat','page','issue','error','problem'}
     keyword_map = defaultdict(list)
     for issue in issues:
         title = issue.get('title', '').lower()
@@ -66,7 +66,7 @@ def find_duplicates(issues):
 def draft_release_notes(prs):
     if not prs:
         return None
-    lines = ["## 🚀 Release Notes\n", "### What's Changed\n"]
+    lines = ["## Release Notes\n", "### What's Changed\n"]
     for pr in prs:
         title = pr.get('title', 'Untitled')
         number = pr.get('number', '?')
@@ -86,44 +86,29 @@ def home():
 def get_attention():
     errors = []
 
-    issues_q = f"""
-        SELECT number, title, state, created_at, user_login
-        FROM github.issues
-        WHERE owner = '{GITHUB_USER}' AND repo = '{GITHUB_REPO}'
-        AND state = 'open'
-        ORDER BY created_at DESC LIMIT 10
-    """
+    issues_q = f"SELECT number, title, state, created_at, user_login FROM github.issues WHERE owner = '{GITHUB_USER}' AND repo = '{GITHUB_REPO}' AND state = 'open' ORDER BY created_at DESC LIMIT 10"
     issues, err = run_coral(issues_q)
-    if err: errors.append(f"Issues: {err}"); issues = []
+    if err:
+        errors.append(f"Issues: {err}")
+        issues = []
 
-    prs_q = f"""
-        SELECT number, title, merged_at, user_login
-        FROM github.pulls
-        WHERE owner = '{GITHUB_USER}' AND repo = '{GITHUB_REPO}'
-        AND state = 'closed'
-        ORDER BY merged_at DESC LIMIT 5
-    """
+    prs_q = f"SELECT number, title, merged_at, user_login FROM github.pulls WHERE owner = '{GITHUB_USER}' AND repo = '{GITHUB_REPO}' AND state = 'closed' ORDER BY merged_at DESC LIMIT 5"
     prs, err = run_coral(prs_q)
-    if err: errors.append(f"PRs: {err}"); prs = []
+    if err:
+        errors.append(f"PRs: {err}")
+        prs = []
 
-    join_q = f"""
-        SELECT g.number, g.title, s.text as slack_discussion
-        FROM github.issues g
-        JOIN slack.messages s ON s.channel_id = '{SLACK_CHANNEL}'
-        WHERE g.owner = '{GITHUB_USER}' AND g.repo = '{GITHUB_REPO}'
-        AND g.state = 'open' LIMIT 10
-    """
+    join_q = f"SELECT g.number, g.title, s.text as slack_discussion FROM github.issues g JOIN slack.messages s ON s.channel_id = '{SLACK_CHANNEL}' WHERE g.owner = '{GITHUB_USER}' AND g.repo = '{GITHUB_REPO}' AND g.state = 'open' LIMIT 10"
     cross_join, err = run_coral(join_q)
-    if err: errors.append(f"Join: {err}"); cross_join = []
+    if err:
+        errors.append(f"Join: {err}")
+        cross_join = []
 
-    slack_q = f"""
-        SELECT id, text, user,username, ts
-        FROM slack.messages
-        WHERE channel_id = '{SLACK_CHANNEL}'
-        ORDER BY ts DESC LIMIT 10
-    """
+    slack_q = f"SELECT id, text, user, username, ts FROM slack.messages WHERE channel_id = '{SLACK_CHANNEL}' ORDER BY ts DESC LIMIT 10"
     slack, err = run_coral(slack_q)
-    if err: errors.append(f"Slack: {err}"); slack = []
+    if err:
+        errors.append(f"Slack: {err}")
+        slack = []
 
     duplicates = find_duplicates(issues or [])
     release_notes = draft_release_notes(prs)

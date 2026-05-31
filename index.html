@@ -144,12 +144,6 @@ h1 em{font-style:italic;background:linear-gradient(115deg,var(--gold) 0%,var(--g
 .cts{font-family:var(--font-mono);font-size:11px;color:var(--dim);margin-left:auto;font-weight:400}
 .cnote{font-family:var(--font-mono);font-size:11.5px;color:var(--sub);border-top:1px solid var(--border);padding-top:8px;line-height:1.6;font-weight:400}
 .rn{padding:18px 20px;font-family:var(--font-mono);font-size:12.5px;line-height:1.85;color:var(--sub);white-space:pre-wrap;border-top:1px solid var(--border);font-weight:400}
-.slack-list{padding:6px 8px;display:flex;flex-direction:column;gap:2px}
-.smsg{display:flex;gap:11px;padding:10px 10px;border-radius:7px;transition:background .15s}
-.smsg:hover{background:var(--s2)}
-.av{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,var(--violet),var(--cyan));display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;color:#fff;font-family:var(--font-sans)}
-.su{font-size:12.5px;font-weight:600;color:var(--gold);margin-bottom:3px;font-family:var(--font-sans)}
-.st{font-size:13px;color:var(--sub);line-height:1.6;word-break:break-word;font-weight:400}
 .empty{padding:32px 18px;text-align:center;color:var(--dim);font-family:var(--font-mono);font-size:12.5px;letter-spacing:.3px;font-weight:400}
 .err-box{background:rgba(240,108,108,.05);border:1px solid rgba(240,108,108,.15);border-radius:10px;padding:18px 22px;color:#f4a0a0;font-family:var(--font-mono);font-size:12.5px;line-height:1.78;font-weight:400}
 .err-box strong{color:var(--err);font-size:14px;display:block;margin-bottom:8px;font-family:var(--font-sans)}
@@ -224,7 +218,7 @@ footer{padding:20px 28px;border-top:1px solid var(--border);display:flex;justify
     <div class="hero">
       <div class="kicker"><span class="kl"></span>Your developer command center</div>
       <h1>Dev's <em>First Mate</em></h1>
-      <p class="hdesc">GitHub and Slack, unified through Coral SQL. Surface every issue, PR, and conversation that needs your attention — on demand.</p>
+      <p class="hdesc">GitHub unified through Coral SQL. Surface every issue, PR, and cross-source connection that needs your attention — on demand.</p>
     </div>
 
     <div class="div"></div>
@@ -235,13 +229,13 @@ footer{padding:20px 28px;border-top:1px solid var(--border);display:flex;justify
       </button>
       <div class="cta-note">
         <span>Powered by <strong>Coral cross-source JOIN</strong></span>
-        <span>GitHub · Slack · unified in one query</span>
+        <span>GitHub · unified in one query</span>
       </div>
     </div>
-    <div id="sbar"><div class="spin"></div><span id="stxt">Querying Coral across GitHub + Slack…</span></div>
+    <div id="sbar"><div class="spin"></div><span id="stxt">Querying Coral across GitHub…</span></div>
 
     <div class="features">
-      <div class="feat"><div class="feat-ico">🔗</div><div class="feat-title">Cross-source JOIN</div><div class="feat-desc">Coral SQL merges GitHub issues with Slack threads in a single query</div></div>
+      <div class="feat"><div class="feat-ico">🔗</div><div class="feat-title">Cross-source JOIN</div><div class="feat-desc">Coral SQL merges GitHub issues and PRs in a single query</div></div>
       <div class="feat"><div class="feat-ico">📝</div><div class="feat-title">Auto release notes</div><div class="feat-desc">Merged PRs are summarised into ready-to-ship release notes via AI</div></div>
       <div class="feat"><div class="feat-ico">⚡</div><div class="feat-title">Real-time digest</div><div class="feat-desc">One click fetches live data — no stale cache, no manual refresh needed</div></div>
     </div>
@@ -265,13 +259,11 @@ footer{padding:20px 28px;border-top:1px solid var(--border);display:flex;justify
       <button class="tab active" onclick="switchTab('issues',this)"><span class="tab-ico">🐛</span>Issues<span class="tab-ct" id="tc-i">0</span></button>
       <button class="tab" onclick="switchTab('prs',this)"><span class="tab-ico">✅</span>Merged PRs<span class="tab-ct" id="tc-p">0</span></button>
       <button class="tab" onclick="switchTab('joins',this)"><span class="tab-ico">⚡</span>Cross-JOIN<span class="tab-ct" id="tc-j">0</span></button>
-      <button class="tab" onclick="switchTab('slack',this)"><span class="tab-ico">💬</span>Slack<span class="tab-ct" id="tc-s">0</span></button>
       <button class="tab" onclick="switchTab('notes',this)" id="tab-notes" style="display:none"><span class="tab-ico">📝</span>Release Notes</button>
     </div>
     <div id="panel-issues" class="panel active"></div>
     <div id="panel-prs" class="panel"></div>
     <div id="panel-joins" class="panel"></div>
-    <div id="panel-slack" class="panel"></div>
     <div id="panel-notes" class="panel"></div>
   </div>
   <footer style="margin-top:60px">
@@ -301,7 +293,6 @@ function switchTab(id,el){
 }
 
 function fmt(ts){if(!ts)return'';return new Date(ts).toLocaleDateString('en-IN',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}
-function ini(n){return(n||'?').split(/[\s_-]/)[0].slice(0,2).toUpperCase()}
 
 function rIssues(d){
   if(!d||!d.length)return'<div class="empty">✓ No open issues — you\'re clear!</div>';
@@ -311,13 +302,9 @@ function rPRs(d){
   if(!d||!d.length)return'<div class="empty">No recently merged PRs found.</div>';
   return'<div class="sec"><div class="sec-head"><div class="sico">✅</div><span class="slbl">Recently Merged PRs</span><span class="badge am">'+d.length+' merged</span></div><div class="cards">'+d.map(p=>`<div class="card"><div class="ctop"><span class="cnum">#${p.number}</span><span class="ctit">${p.title}</span></div><div class="cbot"><span class="tag mg">merged</span><span class="cwho">@${p.user_login||'unknown'}</span><span class="cts">${fmt(p.merged_at)}</span></div></div>`).join('')+'</div></div>'
 }
-function rSlack(d){
-  if(!d||!d.length)return'<div class="empty">No Slack messages found.</div>';
-  return'<div class="sec"><div class="sec-head"><div class="sico">💬</div><span class="slbl">Recent Slack Activity</span><span class="badge bl">'+d.length+' messages</span></div><div class="slack-list">'+d.map(m=>`<div class="smsg"><div class="av">${ini(m.user||m.username)}</div><div><div class="su">${m.user||m.username||'Unknown'}</div><div class="st">${m.text||''}</div></div></div>`).join('')+'</div></div>'
-}
 function rJoin(d){
   if(!d||!d.length)return'<div class="empty">No cross-source matches found.</div>';
-  return'<div class="sec"><div class="sec-head"><div class="sico">⚡</div><span class="slbl">Cross-Source JOIN: GitHub ↔ Slack</span><span class="badge bl">'+d.length+' matches</span></div><div class="cards">'+d.map(r=>`<div class="card"><div class="ctop"><span class="cnum">#${r.number}</span><span class="ctit">${r.title}</span></div><div class="cbot"><span class="tag xj">cross-join</span><span class="tag sr">GitHub ↔ Slack</span></div>${r.slack_discussion?`<div class="cnote">💬 ${r.slack_discussion}</div>`:''}</div>`).join('')+'</div></div>'
+  return'<div class="sec"><div class="sec-head"><div class="sico">⚡</div><span class="slbl">Cross-Source JOIN</span><span class="badge bl">'+d.length+' matches</span></div><div class="cards">'+d.map(r=>`<div class="card"><div class="ctop"><span class="cnum">#${r.number}</span><span class="ctit">${r.title}</span></div><div class="cbot"><span class="tag xj">cross-join</span></div>${r.slack_discussion?`<div class="cnote">💬 ${r.slack_discussion}</div>`:''}</div>`).join('')+'</div></div>'
 }
 
 let cache=null;
@@ -325,7 +312,7 @@ async function loadData(){
   const btn=document.getElementById('loadBtn'),bar=document.getElementById('sbar'),txt=document.getElementById('stxt');
   btn.classList.add('loading');btn.innerHTML='<span>⏳</span> Loading…';
   bar.classList.add('on');
-  const steps=['Querying Coral across GitHub + Slack…','Running cross-source JOIN…','Drafting release notes…','Assembling your digest…'];
+  const steps=['Querying Coral across GitHub…','Running cross-source JOIN…','Drafting release notes…','Assembling your digest…'];
   let si=0;const ti=setInterval(()=>{txt.textContent=steps[si=(si+1)%steps.length]},1200);
   try{
     const r=await fetch('/api/attention');const d=await r.json();
@@ -336,7 +323,6 @@ async function loadData(){
     document.getElementById('panel-issues').innerHTML=rIssues(d.issues);
     document.getElementById('panel-prs').innerHTML=rPRs(d.prs);
     document.getElementById('panel-joins').innerHTML=rJoin(d.cross_join);
-    document.getElementById('panel-slack').innerHTML=rSlack(d.slack);
     if(d.release_notes){
       document.getElementById('panel-notes').innerHTML=`<div class="sec"><div class="sec-head"><div class="sico">📝</div><span class="slbl">Auto-Drafted Release Notes</span><span class="badge am">AI Generated</span></div><div class="rn">${d.release_notes}</div></div>`;
       document.getElementById('tab-notes').style.display='';
@@ -344,7 +330,6 @@ async function loadData(){
     document.getElementById('tc-i').textContent=(d.issues||[]).length;
     document.getElementById('tc-p').textContent=(d.prs||[]).length;
     document.getElementById('tc-j').textContent=(d.cross_join||[]).length;
-    document.getElementById('tc-s').textContent=(d.slack||[]).length;
     document.getElementById('det-ts').textContent='Updated '+new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
     showDetail();
   }catch(e){
